@@ -136,6 +136,17 @@ namespace Game.Editor
             var progressText = CreateText("ProgressText", panel, 40, TextAnchor.UpperLeft);
             Place(progressText.rectTransform, new Vector2(0, 1), new Vector2(40, -20), new Vector2(400, 60), new Vector2(0, 1));
 
+            var satietyLabel = CreateText("SatietyLabel", panel, 40, TextAnchor.UpperRight);
+            Place(satietyLabel.rectTransform, new Vector2(1, 1), new Vector2(-420, -20), new Vector2(400, 60), new Vector2(1, 1));
+
+            var satietyBar = CreateImage("SatietyBar", panel, null, new Color(0.85f, 0.8f, 0.7f));
+            Place(satietyBar.rectTransform, new Vector2(1, 1), new Vector2(-40, -28), new Vector2(360, 40), new Vector2(1, 1));
+            var satietyFill = CreateImage("Fill", satietyBar.transform, null, new Color(1f, 0.6f, 0.25f));
+            satietyFill.rectTransform.anchorMin = Vector2.zero;
+            satietyFill.rectTransform.anchorMax = new Vector2(0, 1);
+            satietyFill.rectTransform.pivot = new Vector2(0, 0.5f);
+            satietyFill.rectTransform.sizeDelta = Vector2.zero;
+
             var monster = CreateMonster(panel);
             var foods = CreateFoods(panel);
 
@@ -145,7 +156,8 @@ namespace Game.Editor
 
             var screen = panel.gameObject.AddComponent<GameScreen>();
             Assign(screen, ("_questionImage", questionImage), ("_optionsImage", optionsImage),
-                ("_progressText", progressText), ("_messageText", messageText), ("_monster", monster), ("_foods", foods));
+                ("_progressText", progressText), ("_messageText", messageText), ("_monster", monster), ("_foods", foods),
+                ("_satietyLabel", satietyLabel), ("_satietyFill", satietyFill.rectTransform));
             return screen;
         }
 
@@ -163,6 +175,10 @@ namespace Game.Editor
             var satiety = CreateText("SatietyText", panel, 64, TextAnchor.MiddleCenter);
             Place(satiety.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0, -40), new Vector2(1400, 100));
 
+            var growth = CreateText("GrowthText", panel, 56, TextAnchor.MiddleCenter);
+            Place(growth.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0, -150), new Vector2(1400, 90));
+            growth.color = new Color(0.9f, 0.45f, 0.1f);
+
             var playAgain = CreateButton("PlayAgainButton", panel, "再玩一次", 60, new Color(1f, 0.6f, 0.25f));
             Place((RectTransform)playAgain.transform, new Vector2(0.5f, 0), new Vector2(-260, 160), new Vector2(420, 150));
 
@@ -170,7 +186,8 @@ namespace Game.Editor
             Place((RectTransform)changeGrade.transform, new Vector2(0.5f, 0), new Vector2(260, 160), new Vector2(420, 150));
 
             var screen = panel.gameObject.AddComponent<ResultScreen>();
-            Assign(screen, ("_scoreText", score), ("_satietyText", satiety), ("_playAgainButton", playAgain),
+            Assign(screen, ("_scoreText", score), ("_satietyText", satiety), ("_growthText", growth),
+                ("_playAgainButton", playAgain),
                 ("_changeGradeButton", changeGrade));
             return screen;
         }

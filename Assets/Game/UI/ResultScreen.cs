@@ -13,6 +13,7 @@ namespace Game
     {
         [SerializeField] private Text _scoreText;
         [SerializeField] private Text _satietyText;
+        [SerializeField] private Text _growthText;
         [SerializeField] private Button _playAgainButton;
         [SerializeField] private Button _changeGradeButton;
 
@@ -25,11 +26,16 @@ namespace Game
         }
 
         // 玩家按下按鈕時完成
-        public Awaitable<ResultChoice> Show(int firstTryCorrect, int questionCount, int satietyGained)
+        // grownTo 是這局長大到的階段，沒長大時為 null
+        public Awaitable<ResultChoice> Show(int firstTryCorrect, int questionCount, int satietyGained,
+            int totalSatiety, MonsterStage? grownTo)
         {
             gameObject.SetActive(true);
             _scoreText.text = $"第一次就答對 {firstTryCorrect} / {questionCount} 題";
-            _satietyText.text = $"飽足度 +{satietyGained}";
+            _satietyText.text = $"飽足度 +{satietyGained}（累積 {totalSatiety}）";
+            _growthText.gameObject.SetActive(grownTo.HasValue);
+            if (grownTo.HasValue)
+                _growthText.text = $"小怪獸長大了，變成{MonsterStageNames.Of(grownTo.Value)}！";
             _choice = new AwaitableCompletionSource<ResultChoice>();
             return _choice.Awaitable;
         }

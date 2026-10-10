@@ -12,12 +12,18 @@ namespace Game
         [SerializeField] private Text _progressText;
         [SerializeField] private Text _messageText;
         [SerializeField] private MonsterView _monster;
+        [SerializeField] private Text _satietyLabel;
+        [SerializeField] private RectTransform _satietyFill;
         [SerializeField] private FoodItem[] _foods;
         [SerializeField] private float _foodSpacing = 300f;
 
         private QuestionRound _round;
+        private MonsterStage _stage;
         private AwaitableCompletionSource _finished;
         private bool _isBusy;
+
+        // 每次答對時通知，由進入點累加飽足度並存檔
+        public event Action Fed;
 
         private void Awake()
         {
@@ -29,10 +35,18 @@ namespace Game
             }
         }
 
+        public void ShowProgress(PlayerProgress progress)
+        {
+            _stage = progress.Stage;
+            _satietyLabel.text = $"飽足度（{MonsterStageNames.Of(progress.Stage)}）";
+            _satietyFill.anchorMax = new Vector2(progress.StageProgress, 1);
+        }
+
         // 上一局的圖片可能已經釋放，取題期間先清掉
         public void ShowLoading()
         {
             gameObject.SetActive(true);
+            _monster.SetStage(_stage);
             SetImage(_questionImage, null);
             SetImage(_optionsImage, null);
             _progressText.text = "";
@@ -127,6 +141,13 @@ namespace Game
             {
                 await food.FlyInto(_monster.MouthPosition);
                 await _monster.PlayEat();
+                Fed?.Invoke();
+                if (_monster.Stage != _stage)
+                {
+                    ShowMessage("長大了！");
+                    await _monster.GrowTo(_stage);
+                }
+
                 if (_round.IsFinished)
                     Finish();
                 else

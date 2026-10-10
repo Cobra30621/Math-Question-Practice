@@ -1,0 +1,28 @@
+# Unity
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+*.csproj
+*.sln
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+*.apk
+*.aab
+crashlytics-build.properties
+
+# IDE / OS
+.idea/
+.vs/
+.vscode/
+.qodo/
+.DS_Store
+
+# eMath Token：只存在本機，見 Docs/QuestionModule.md
+/Assets/Config/EMathConfig.asset
+/Assets/Config/EMathConfig.asset.meta

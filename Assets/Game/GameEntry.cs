@@ -21,6 +21,12 @@ namespace Game
         private IReadOnlyList<Question> _questions;
         private MonsterStage? _grownThisRound;
 
+        private void Awake()
+        {
+            // Android 預設 30 FPS，拖曳食物時會覺得卡
+            Application.targetFrameRate = 60;
+        }
+
         private async void Start()
         {
             var online = _eMathConfig != null ? new EMathQuestionSource(_eMathConfig) : null;

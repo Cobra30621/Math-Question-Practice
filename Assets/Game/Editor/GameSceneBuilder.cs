@@ -13,6 +13,9 @@ namespace Game.Editor
     internal static class GameSceneBuilder
     {
         private const string ScenePath = "Assets/Scenes/Game.unity";
+
+        // 放一個中文字型檔到這裡再重建場景，就會取代內建字型
+        private const string FontFolder = "Assets/Game/Fonts";
         private static readonly Vector2 ReferenceResolution = new(1920, 1080);
 
         // 先用顏色區分食物（蘋果、香蕉、葡萄、草莓），之後換圖
@@ -36,7 +39,7 @@ namespace Game.Editor
 
             _circle = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
             _roundedRect = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
-            _font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            _font = FindProjectFont() ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
 
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             CreateCamera();
@@ -315,6 +318,15 @@ namespace Game.Editor
             rect.pivot = pivot ?? new Vector2(0.5f, anchor.y);
             rect.anchoredPosition = position;
             rect.sizeDelta = size;
+        }
+
+        // 內建字型的中文要靠作業系統補字，萬一某台平板顯示成方塊，可以改用自備的字型
+        private static Font FindProjectFont()
+        {
+            if (!AssetDatabase.IsValidFolder(FontFolder))
+                return null;
+            string guid = AssetDatabase.FindAssets("t:Font", new[] { FontFolder }).FirstOrDefault();
+            return guid == null ? null : AssetDatabase.LoadAssetAtPath<Font>(AssetDatabase.GUIDToAssetPath(guid));
         }
 
         private static EMathConfig FindConfig()

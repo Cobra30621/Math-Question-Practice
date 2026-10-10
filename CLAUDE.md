@@ -4,6 +4,7 @@
 
 - 企劃與範圍：[Docs/Prototype.md](Docs/Prototype.md)
 - 答題模組設計與 eMath API：[Docs/QuestionModule.md](Docs/QuestionModule.md)
+- 開發日記（給新人看的過程紀錄）：[Docs/DevDiary.md](Docs/DevDiary.md)
 
 動手前先讀這兩份。範圍以 Prototype.md 的「要做／不做」為準，不要自行加功能。
 
